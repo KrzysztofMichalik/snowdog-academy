@@ -1,4 +1,4 @@
-hostname=
-db_name=
-user=
-password=
+hostname=snowdog.km-dev.pl
+db_name=blog
+user=root
+password=f6c0efd27d9a2cb4ad1a049586e5f3d0

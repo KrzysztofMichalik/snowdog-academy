@@ -79,4 +79,36 @@ class Books extends AdminAbstract
     {
         return $this->bookManager->getAllBooks();
     }
+
+    public function csv_view(): void
+    {
+        require __DIR__ . '/../../view/admin/books/file_csv.phtml';
+    }
+    
+    public function csv_upload()
+    {
+        $file = $_FILES['file'];    
+        $savedBooks = $this->readFileContent($file);
+        $_SESSION['flash'] = 'Loaded ' . $savedBooks . ' books. <a href="/admin">Go to book list</a>';
+  
+        require __DIR__ . '/../../view/admin/books/file_csv.phtml';
+    }
+
+    private function readFileContent($file): int
+    {
+        $fileResource = fopen($file["tmp_name"], "r");
+        $result = 0;
+
+        while (($row = fgetcsv($fileResource, 1000, ";")) !== FALSE) {
+            $title = $row[0];
+            $author = $row[1];
+            $isbn = $row[2];
+            if (!empty($title) && !empty($author) && !empty($isbn)) {
+                if ($this->bookManager->create($title, $author, $isbn) > 0) {
+                    $result++;
+                }
+            }
+        }
+        return $result;
+    }
 }

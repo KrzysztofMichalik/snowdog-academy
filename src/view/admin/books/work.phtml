@@ -1,0 +1,18 @@
+<?php use Snowdog\Academy\Model\Book;
+
+require_once(__DIR__ . '/../../common/header.phtml');
+
+$fileResource = fopen($file["tmp_name"], "r");
+        $result = 0;
+
+        while (($row = fgetcsv($fileResource, 10000, ";")) !== FALSE) {
+            $title = $row[0];
+            $author = $row[1];
+            $isbn = $row[2];
+            if (!empty($title) && !empty($author) && !empty($isbn)) {
+                if ($this->bookManager->create($title, $author, $isbn) > 0) {
+                    $result++;
+                }
+            }
+        }
+        return $result;
